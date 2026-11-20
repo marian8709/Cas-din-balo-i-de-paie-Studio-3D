@@ -1,0 +1,8 @@
+{
+  "name": "Casă din baloți de paie – Studio 3D",
+  "description": "Vizualizare arhitecturală 3D, simulare solară și calcul structural pentru o casă din baloți de paie (7,20 × 11,73 m, Clejani).",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
