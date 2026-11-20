@@ -706,7 +706,7 @@ export function generateAllSheets(data: BuiltSceneData): DrawingSheet[] {
     p.leader(RX[3], y0 + 0.1, -24, 30, 'căpriori-scară 4,5×9,5 + inimă OSB 12, h 40, la ' + fm(PR, 3) + ' m');
     p.leader(RX[3] + 0.28, y0 + 0.3, -12, 38, 'baloți 50×40 culcați între căpriori');
     p.leader(0.2, slY(zz, 0) - 0.05, -14, 8, 'cosoroabă înclinată 12×15 pe stâlpi 12×20');
-    p.leader(W - 0.2, F + 1.0, 14, 6, 'ușa de est (secționată)');
+    p.leader(W - 0.2, F + 1.0, 14, 6, 'peretele de est (secționat)');
     p.text(-1.2, -0.95, 'V', 'tb', 'start');
     p.text(a1 + 1.2, -0.95, 'E', 'tb', 'end');
     return { title: 'Secțiunea A–A (E–V, spre nord)', scale: '1:50', body: p.svg() + `<text x="12" y="11" class="tt">Secțiunea A–A</text>` };
@@ -742,9 +742,9 @@ export function generateAllSheets(data: BuiltSceneData): DrawingSheet[] {
       if (wl === WB) {
         const yT = F - 0.03;
         R(0, yT - 0.2, W, yT, 'deck');
-        for (const x of [0, 0.91 - 0.09, 2.91, 4.45, 5.95, W - 0.09]) R(x, yT, x + 0.09, yT + 1.0, 'wood');
-        R(0, yT + 0.95, 0.91, yT + 1.04, 'wood');
-        R(2.91, yT + 0.95, W, yT + 1.04, 'wood');
+        for (const x of [0, 1.55, 3.11 - 0.09, 5.11, 6.15, W - 0.09]) R(x, yT, x + 0.09, yT + 1.0, 'wood');
+        R(0, yT + 0.95, 3.11, yT + 1.04, 'wood');
+        R(5.11, yT + 0.95, W, yT + 1.04, 'wood');
       }
       const lx = Math.min(H(XL), H(XR)) - 0.3;
       p.level(lx, F, '±0,00', -1);
@@ -819,7 +819,7 @@ export function generateAllSheets(data: BuiltSceneData): DrawingSheet[] {
     eaveFacade(WA, 36, 108, 'Fațada Nord (spre casa veche)');
     eaveFacade(WB, 170, 108, 'Fațada Sud (spre grădină) – panouri pe versant');
     gableFacade(WLw, 36, 226, 'Fațada Vest (fronton, spre vecin)');
-    gableFacade(WRw, 222, 226, 'Fațada Est (fronton, intrarea laterală)');
+    gableFacade(WRw, 222, 226, 'Fațada Est (fronton, spre rampă)');
     return { title: 'Fațade', scale: '1:100', body: out.join('') + `<text x="12" y="11" class="tt">Fațade</text>` };
   };
 

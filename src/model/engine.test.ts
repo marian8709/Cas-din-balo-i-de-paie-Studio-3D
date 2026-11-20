@@ -132,18 +132,26 @@ test('all interior doors are retractable pocket doors fitting within their wall 
   assert.ok(tech.spanU0 >= 6.65 && tech.spanU1 <= 8.15, `Tech pocket [${tech.spanU0}, ${tech.spanU1}] must fit in [6.65, 8.15]`);
 });
 
-test('South terrace door and West fireplace-corner window align with rearranged living/kitchen layout', () => {
+test('swapped South window/door, SW fireside nook, and low 40cm window seats align cleanly', () => {
   const walls = createInitialWalls();
   const wb = walls.find((w) => w.id === 'B')!;
   const wlw = walls.find((w) => w.id === 'Lw')!;
+  const wrw = walls.find((w) => w.id === 'Rw')!;
+  const southWin = wb.openings.find((o) => o.type === 'win')!;
   const southDoor = wb.openings.find((o) => o.type === 'door')!;
   const westWin = wlw.openings[0];
 
-  // South terrace door moved to SW living side (centered ~1.91 m)
-  assert.ok(southDoor.u1 < 3.0, `Expected South terrace door on SW living side, got [${southDoor.u0}, ${southDoor.u1}]`);
+  assert.equal(wrw.openings.filter((o) => o.type === 'door').length, 0, 'East exterior door removed for enlarged kitchen');
+  // South window sits SW next to the fireplace; South door sits to its East
+  assert.ok(southWin && southDoor && southWin.u1 < southDoor.u0, 'South window sits West of South terrace door');
+  assert.ok(southDoor.u0 >= 3.30 && southDoor.u1 <= 5.00, `Expected South terrace door at [3.35, 4.87], got [${southDoor.u0}, ${southDoor.u1}]`);
   assert.ok(Math.abs(WALK_AT.terasa[0] - (southDoor.u0 + southDoor.u1) / 2) < 0.05);
+  assert.ok(Math.abs(WALK_AT.intrare[0] - (southDoor.u0 + southDoor.u1) / 2) < 0.05);
 
-  // West window shifted south toward SW corner, leaving solid wall beside stove (z = 6.30)
-  assert.ok(westWin.u0 >= 8.20 && westWin.u1 <= 11.0, `Expected West window near SW corner, got [${westWin.u0}, ${westWin.u1}]`);
-  assert.ok(westWin.u0 - C.chim.z >= 2.0, 'Solid wall space kept beside wood stove');
+  // West window beside living seating lowered to 0.40 m for window seating, south of ridge post
+  assert.ok(westWin.u0 >= ZR + 0.15 && westWin.u1 <= 8.6);
+  assert.equal(westWin.sill, 0.40, 'West window lowered to 0.40 m seat height');
+
+  // Stove / chimney in SW corner
+  assert.ok(C.chim.x >= 0.85 && C.chim.x <= 1.15 && C.chim.z >= 10.7 && C.chim.z <= C.L - T - 0.15);
 });

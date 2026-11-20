@@ -24,7 +24,7 @@ export const C = {
   septic: { x0: 0.2, x1: 3.8, z0: -7.5, z1: -5.1, depth: 2.40 },
   well: { x: 0.3, z: -17.7, depth: 8.0 },
   site: { width: 10, length: 100, front: 30, yard: 8, west: 0.8 },
-  chim: { x: 1.05, z: 6.30 },
+  chim: { x: 1.00, z: 10.92 },
   lat: 44.3185,
   lon: 25.6992,
 };
@@ -230,8 +230,8 @@ export function createInitialWalls(): WallDef[] {
       corners: true,
       pd: C.post,
       openings: [
-        { u0: 1.15, u1: 2.67, type: 'door', double: true },
-        { u0: 3.15, u1: 4.85, type: 'win', double: true },
+        { u0: 1.55, u1: 3.07, type: 'win', double: true },
+        { u0: 3.35, u1: 4.87, type: 'door', double: true },
       ],
     },
     {
@@ -246,7 +246,7 @@ export function createInitialWalls(): WallDef[] {
       corners: false,
       pd: C.postG,
       ridge: ZR,
-      openings: [{ u0: 8.45, u1: 10.85, type: 'win', double: true, sill: 0.60, light: true }],
+      openings: [{ u0: 6.18, u1: 8.38, type: 'win', double: true, sill: 0.40, light: true }],
     },
     {
       id: 'Rw',
@@ -263,7 +263,6 @@ export function createInitialWalls(): WallDef[] {
       openings: [
         { u0: 0.95, u1: 2.35, type: 'win', double: true },
         { u0: 4.95, u1: 5.60, type: 'win', sill: 1.20 },
-        { u0: 8.52, u1: 9.69, type: 'door' },
         { u0: 9.95, u1: 11.05, type: 'win', sill: 1.05 },
       ],
     },
@@ -427,12 +426,12 @@ export const ZON: [string, [number, number, number, number][], number, [number, 
     'Living (fără zona sobei și comoda TV)',
     [
       [1.25, 4.25, 5.35, 8.20],
-      [0.55, 3.05, 8.20, 11.15],
+      [1.52, 3.55, 8.20, 11.15],
     ],
     70,
     [4.36, 6.35, 'x'],
   ],
-  ['Loc de masă / bucătărie', [[4.45, 6.05, 8.35, 10.50]], 70, [5.10, 8.27, 'z']],
+  ['Loc de masă / bucătărie', [[4.95, 6.00, 8.35, 10.50]], 70, [5.10, 8.27, 'z']],
   ['Baie (covor sub gresie)', [[4.65, 5.75, 5.35, 6.45]], 150, [4.36, 6.12, 'x']],
 ];
 
@@ -533,14 +532,14 @@ export const JVIEWS: Record<string, [[number, number, number], [number, number, 
 };
 
 export const WALK_AT: Record<string, [number, number, number, number]> = {
-  intrare: [W + 0.85, 9.10, 3.0, 9.10],
-  living: [3.55, 8.25, 1.8, 5.8],
-  bucatarie: [4.75, 8.95, 5.5, 10.5],
-  dorm1: [2.82, 4.08, 1.4, 2.2],
+  intrare: [4.11, L + 1.2, 4.11, 7.6],
+  living: [3.20, 7.65, 1.35, 10.35],
+  bucatarie: [5.05, 8.55, 6.20, 10.20],
+  dorm1: [2.70, 4.10, 1.85, 1.50],
   dorm2: [4.05, 4.08, 5.3, 1.8],
   baie: [4.85, 5.58, 6.3, 5.3],
   tehnica: [4.85, 7.36, 6.2, 7.25],
-  terasa: [1.91, L + 2.2, 1.91, L + 12],
+  terasa: [4.11, L + 2.2, 4.11, L + 12],
 };
 
 /* ============================== FUNCȚII SOLARE & UTILITARE PURE ============================== */

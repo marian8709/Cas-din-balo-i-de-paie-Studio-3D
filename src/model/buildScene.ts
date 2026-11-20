@@ -853,11 +853,18 @@ export function buildArchitecturalScene(
       const gl = wbox(lay, o.light ? MAT.frost : MAT.glass, wl, u0 + fw, u1 - fw, vb + fw, vt - fw, 0.11, 0.12);
       gl.castShadow = false;
       if (o.type === 'win') {
+        const isSeat = ow >= 1.20 && (o.sill ?? C.winSill) <= 0.50;
         wbox(lay, MAT.metal, wl, o.u0 - 0.03, o.u1 + 0.03, vb - 0.014, vb, -0.09, a);
-        // Interior oak windowsill for refined architectural detail
-        wbox(lay, MAT.woodLight, wl, o.u0, o.u1, vb - 0.02, vb, b, T + PL + 0.02);
+        if (isSeat) {
+          // Banchetă profundă de șezut din stejar în grosimea peretelui de 40 cm + consolă 6 cm spre cameră
+          wbox(lay, MAT.woodLight, wl, o.u0 + t, o.u1 - t, vb, vb + 0.035, b, T + PL + 0.06);
+          wbox(lay, MAT.woodLight, wl, o.u0 + t, o.u1 - t, vb - 0.04, vb, T + PL, T + PL + 0.055);
+          bom('Tâmplărie', 'Banchetă glaf interior stejar lamelat (spațiu șezut în perete 40 cm)', 'm', ow);
+        } else {
+          wbox(lay, MAT.woodLight, wl, o.u0, o.u1, vb - 0.02, vb, b, T + PL + 0.02);
+          bom('Tâmplărie', 'Glaf interior lemn, lățime 30 cm', 'm', ow);
+        }
         bom('Tâmplărie', 'Glaf exterior tablă/lemn, lățime 20 cm', 'm', ow + 0.06);
-        bom('Tâmplărie', 'Glaf interior lemn, lățime 30 cm', 'm', ow);
       }
       const dim = `${Math.round((u1 - u0) * 100)} × ${Math.round((vt - vb) * 100)} cm`;
       bom(
@@ -1364,8 +1371,8 @@ export function buildArchitecturalScene(
       Q.deckBoards++;
     }
     let deckM = Q.deckBoards * W;
-    const sx0 = 0.91;
-    const sx1 = 2.91;
+    const sx0 = 3.11;
+    const sx1 = 5.11;
     stairs(lay, { axis: 'z', c: sx0, dir: 1 }, sx1 - sx0, z1, yT);
     const a0 = W + PL + 0.015;
     const a1 = a0 + t.sideDepth;
@@ -1469,24 +1476,24 @@ export function buildArchitecturalScene(
     post(W - 0.09, (c1 + z1) / 2);
     post(W - 0.09, z1 - 0.09);
     rail(W - 0.085, W - 0.04, c1, z1);
-    for (const x of [0, sx0 - 0.09, sx1, 4.45, 5.95]) post(x, z1 - 0.09);
+    for (const x of [0, 1.55, sx0 - 0.09, sx1, 6.15]) post(x, z1 - 0.09);
     rail(x0, sx0, z1 - 0.05, z1 - 0.005);
     rail(sx1, x1, z1 - 0.05, z1 - 0.005);
     post(0, z0);
     post(0, z0 + t.depth / 2);
     rail(0.005, 0.05, z0, z1);
 
-    // Attractive terrace lounge ensemble (outdoor wooden bench + coffee table on SE side, clear of SW door stairs)
+    // Attractive terrace lounge ensemble (outdoor wooden bench + coffee table on SW side, clear of S-center door stairs)
     const loungeMat = MAT.woodDark;
     const cushionMat = new THREE.MeshStandardMaterial({ color: 0xd9d2c5, roughness: 0.9, clippingPlanes: [clipPlane] });
     const plantLeafMat = new THREE.MeshStandardMaterial({ color: 0x4b7433, roughness: 0.85, clippingPlanes: [clipPlane] });
     const potTerraMat = new THREE.MeshStandardMaterial({ color: 0xb6673d, roughness: 0.78, clippingPlanes: [clipPlane] });
-    // South-east terrace lounge sofa + low table
-    box(lay, loungeMat, 4.20, 5.90, yT, yT + 0.34, z0 + 0.55, z0 + 1.30);
-    box(lay, cushionMat, 4.25, 5.85, yT + 0.34, yT + 0.44, z0 + 0.60, z0 + 1.25);
-    box(lay, cushionMat, 4.25, 5.85, yT + 0.34, yT + 0.72, z0 + 0.55, z0 + 0.72);
-    box(lay, loungeMat, 4.55, 5.55, yT + 0.36, yT + 0.40, z0 + 1.65, z0 + 2.35);
-    for (const [lx, lz] of [[4.60, z0 + 1.70], [5.50, z0 + 1.70], [4.60, z0 + 2.30], [5.50, z0 + 2.30]]) {
+    // South-west terrace lounge sofa + low table (clear of 3.35..4.87 terrace door)
+    box(lay, loungeMat, 1.00, 2.70, yT, yT + 0.34, z0 + 0.55, z0 + 1.30);
+    box(lay, cushionMat, 1.05, 2.65, yT + 0.34, yT + 0.44, z0 + 0.60, z0 + 1.25);
+    box(lay, cushionMat, 1.05, 2.65, yT + 0.34, yT + 0.72, z0 + 0.55, z0 + 0.72);
+    box(lay, loungeMat, 1.35, 2.35, yT + 0.36, yT + 0.40, z0 + 1.65, z0 + 2.35);
+    for (const [lx, lz] of [[1.40, z0 + 1.70], [2.30, z0 + 1.70], [1.40, z0 + 2.30], [2.30, z0 + 2.30]]) {
       box(lay, loungeMat, lx - 0.025, lx + 0.025, yT, yT + 0.36, lz - 0.025, lz + 0.025);
     }
     // Planter pots flanking south terrace stairs
@@ -1881,10 +1888,12 @@ export function buildArchitecturalScene(
     const lamps: [number, number][] = [
       [1.87, 2.55],
       [5.12, 2.55],
-      [2.30, 6.60],
-      [1.95, 9.65],
-      [3.82, 9.62],
-      [6.05, 10.45],
+      [2.25, 6.65],
+      [2.05, 9.85],
+      [4.35, 8.80],
+      [4.35, 9.58],
+      [5.50, 9.60],
+      [5.85, 10.55],
       [5.60, 5.65],
       [5.65, 7.40],
     ];
@@ -1894,7 +1903,7 @@ export function buildArchitecturalScene(
       if (yl < cy(l[1]) - 0.06) lLight += cab(mLight, [[l[0], cy(l[1]), l[1]], [l[0], yl, l[1]]]);
       cyl(EL, mLamp, l[0], l[1], 0.13, yl - 0.05, yl);
     }
-    const extL: [number, number][] = [[1.91, L + 0.06], [W + 0.06, 9.1], [W / 2, -0.06]];
+    const extL: [number, number][] = [[4.11, L + 0.06], [W + 0.06, 9.8], [W / 2, -0.06]];
     for (const l of extL) {
       lLight += cab(mLight, ceil(J, [Math.min(l[0], W - 0.45), Math.min(Math.max(l[1], 0.45), L - 0.45)]));
       box(EL, mLamp, l[0] - 0.08, l[0] + 0.08, F + 2.15, F + 2.27, l[1] - 0.08, l[1] + 0.08);
@@ -1902,9 +1911,9 @@ export function buildArchitecturalScene(
 
     // 3 warm unshadowed point lights for cozy interior / terrace ambiance at golden hour / dusk
     const lightPositions: [number, number, number][] = [
-      [2.4, F + 2.4, 7.0],   // Living
-      [5.0, F + 2.4, 9.5],   // Kitchen + Island
-      [1.91, F + 2.2, L + 1.2], // South terrace door
+      [2.2, F + 2.4, 7.6],   // Living + Fireside
+      [5.2, F + 2.4, 9.5],   // Enlarged Kitchen + Island
+      [4.11, F + 2.2, L + 1.2], // South terrace door
     ];
     for (const [lx, ly, lz] of lightPositions) {
       const pl = new THREE.PointLight(0xffcb80, 0, 10, 1.8);
@@ -1915,9 +1924,9 @@ export function buildArchitecturalScene(
 
     const CIRC: [string, [number, number, number][]][] = [
       ['Prize dormitoare', [[0.46, 1.25, 0.3], [0.46, 3.40, 0.3], [2.95, 0.46, 0.3], [3.48, 0.95, 0.3], [3.48, 3.30, 0.3], [6.74, 2.95, 0.3], [6.74, 0.70, 0.3]]],
-      ['Prize living', [[0.95, 4.86, 0.3], [1.95, 4.86, 0.3], [4.33, 6.45, 0.3], [0.46, 7.65, 0.3], [0.78, 11.27, 0.3], [4.80, 8.28, 0.3]]],
-      ['Bucătărie (circuit separat)', [[6.74, 9.82, 0.3], [6.55, 11.27, 1.1], [5.60, 11.27, 1.1], [5.18, 11.27, 0.3], [6.07, 11.27, 2.10]]],
-      ['Plită (circuit dedicat)', [[5.85, 11.27, 0.60]]],
+      ['Prize living', [[0.95, 4.86, 0.3], [1.95, 4.86, 0.3], [4.33, 6.45, 0.3], [0.46, 5.55, 0.3], [0.46, 8.60, 0.3], [4.96, 11.27, 0.3], [4.80, 8.28, 0.3]]],
+      ['Bucătărie (circuit separat)', [[6.74, 8.55, 0.3], [6.74, 9.15, 0.3], [6.74, 9.80, 0.3], [6.48, 11.27, 1.1], [5.20, 11.27, 1.1], [5.75, 11.27, 2.10]]],
+      ['Plită (circuit dedicat)', [[5.75, 11.27, 0.60]]],
       ['Baie + cameră tehnică', [[5.88, 4.87, 1.1], [5.72, 8.08, 1.0], [6.35, 8.08, 0.5]]],
       ['Boiler (circuit dedicat)', [[6.74, 7.05, 1.65]]],
     ];
@@ -1926,8 +1935,7 @@ export function buildArchitecturalScene(
       [3.45, 4.52, 'x'],
       [4.36, 6.58, 'x'],
       [4.36, 8.20, 'x'],
-      [W - T - PL - 0.01, 9.80, 'x'],
-      [2.90, L - T - PL - 0.01, 'z'],
+      [3.21, L - T - PL - 0.01, 'z'],
     ];
     for (const [x, z, ax] of SW) plate(x, z, ax, F + 1.04, F + 1.16);
     const lSw = SW.reduce((a, [x, z]) => a + Math.abs(x - J[0]) + Math.abs(z - J[1]) + 2.0, 0);
@@ -1947,7 +1955,7 @@ export function buildArchitecturalScene(
     const nRow = 3;
     const nCol = 6;
     const gap = 0.02;
-    const sTop = (ZR + C.ovE) / COS - 0.80;
+    const sTop = (ZR + C.ovE) / COS - 0.28;
     const s0 = sTop - nRow * PVL - (nRow - 1) * gap;
     const xs0 = W / 2 - (nCol * PVW + (nCol - 1) * gap) / 2;
     for (let r = 0; r < nRow; r++) {
@@ -2178,92 +2186,120 @@ export function buildArchitecturalScene(
       FURN.push({ cx, cz, r: 0.18 });
     };
 
-    // ---- 1. SOBĂ PE LEMNE + COȘ + SUPORT LEMNE (perete V plin nord de fereastra mutată la 8.45..10.85) ----
+    // ---- 0. SPAȚII DE ȘEZUT ÎN GLAFUL FERESTRELOR JOASE (PEREȚI 40 CM) ----
+    for (const wl of WALLS) {
+      for (const o of wl.openings) {
+        if (o.type !== 'win' || o.u1 - o.u0 < 1.20 || (o.sill ?? C.winSill) > 0.50) continue;
+        const vb = F + (o.sill ?? C.winSill) + 0.022;
+        const t = 0.022;
+        // Saltea moale de șezut în nișa ferestrei + două perne de spătar pe laterale
+        wbox('mobilier', FM.linen, wl, o.u0 + t + 0.015, o.u1 - t - 0.015, vb + 0.035, vb + 0.095, 0.165, T + PL + 0.055);
+        wbox('mobilier', FM.ochre, wl, o.u0 + t + 0.02, o.u0 + t + 0.16, vb + 0.095, vb + 0.36, 0.19, T + PL + 0.02);
+        wbox('mobilier', FM.duvet, wl, o.u1 - t - 0.16, o.u1 - t - 0.02, vb + 0.095, vb + 0.36, 0.19, T + PL + 0.02);
+        const [px0, pz0] = wp(wl, o.u0 + 0.04, T + PL);
+        const [px1, pz1] = wp(wl, o.u1 - 0.04, T + PL + 0.09);
+        FURN.push({ x0: Math.min(px0, px1), x1: Math.max(px0, px1), z0: Math.min(pz0, pz1), z1: Math.max(pz0, pz1) });
+      }
+    }
+
+    // ---- 1. SOBĂ PE LEMNE + COȘ + SUPORT LEMNE (colțul SV, lângă bancheta ferestrei de sud) ----
     const stx = C.chim.x;
     const stz = C.chim.z;
     cyl('mobilier', MAT.stove, stx, stz, 0.27, F + 0.12, F + 1.06);
     cyl('mobilier', MAT.stove, stx, stz, 0.33, F, F + 0.12);
     const emberMat = new THREE.MeshStandardMaterial({ color: 0xff6e20, emissive: 0xff5a00, emissiveIntensity: 1.4, roughness: 0.4, clippingPlanes: [clipPlane] });
-    stoveEmber = box('mobilier', emberMat, stx + 0.22, stx + 0.28, F + 0.36, F + 0.68, stz - 0.14, stz + 0.14);
+    stoveEmber = box('mobilier', emberMat, stx - 0.14, stx + 0.14, F + 0.36, F + 0.68, stz - 0.28, stz - 0.22); // focar spre N (living / zonă șemineu)
     FURN.push({ cx: stx, cz: stz, r: 0.33 });
-    box('mobilier', MAT.ceramic, T + PL, T + PL + 0.03, F, F + 1.65, stz - 0.56, stz + 0.56);
-    box('mobilier', FM.top, stx - 0.50, stx + 0.50, F, F + 0.014, stz - 0.50, stz + 0.50);
+    box('mobilier', MAT.ceramic, T + PL, T + PL + 0.03, F, F + 1.65, 10.35, L - T - PL); // ecran termic V
+    box('mobilier', MAT.ceramic, T + PL, 1.46, F, F + 1.65, L - T - PL - 0.03, L - T - PL); // ecran termic S
+    box('mobilier', FM.top, 0.48, 1.46, F, F + 0.014, 10.38, 11.26); // placă protecție pardoseală SV
     const chTop = yApex + 0.568 + 0.60;
     cyl('mobilier', MAT.stove, stx, stz, 0.08, F + 1.06, chTop);
     cyl('mobilier', MAT.steel, stx, stz, 0.11, roofY(stz) - 0.1, chTop - 0.05, 16);
-    // Suport lemne minimalist la nord de sobă
-    f(FM.black, T + PL + 0.02, T + PL + 0.32, 5.10, 5.62, 0.78);
-    box('mobilier', FM.oak, T + PL + 0.05, T + PL + 0.29, F + 0.06, F + 0.68, 5.14, 5.58);
+    // Suport lemne minimalist la nord de sobă (colț SV)
+    f(FM.black, T + PL + 0.02, T + PL + 0.32, 9.72, 10.24, 0.78);
+    box('mobilier', FM.oak, T + PL + 0.05, T + PL + 0.29, F + 0.06, F + 0.68, 9.76, 10.20);
 
-    // ---- 2. LIVING REARANJAT (NV + COLȚ LECTURĂ SV, DESCHIS SPRE UȘA DE TERASĂ 1.15..2.67) ----
+    // ---- 2. LIVING REARANJAT + ZONĂ COZY DE STAT LÂNGĂ ȘEMINEU (ax liber spre ușa de terasă 3.35..4.87) ----
     // Zonă media N (x = 0.72..2.22, ferită de ușa retractabilă Dormitor 1)
     f(FM.walnut, 0.72, 2.22, 4.84, 5.22, 0.34, 0.12);
     legs(FM.black, 0.78, 2.16, 4.88, 5.18, 0.12, 0.04);
     box('mobilier', FM.oak, 0.84, 2.10, F + 0.52, F + 1.72, 4.835, 4.86);
     box('mobilier', FM.black, 0.94, 2.00, F + 0.78, F + 1.52, 4.865, 4.90);
 
-    // Covor țesut + măsuțe cafea suprapuse + canapea 3 locuri orientată spre TV și sobă (coridor E 3.20..4.38 100% liber)
-    box('mobilier', FM.rug, 1.25, 3.25, F, F + 0.015, 5.50, 8.15);
-    cyl('mobilier', FM.marble, 2.05, 6.26, 0.35, F + 0.36, F + 0.40, 24);
-    cyl('mobilier', FM.black, 2.05, 6.26, 0.03, F, F + 0.36, 10);
-    cyl('mobilier', FM.oak, 2.52, 6.02, 0.23, F + 0.30, F + 0.34, 20);
-    cyl('mobilier', FM.black, 2.52, 6.02, 0.025, F, F + 0.30, 10);
+    // Covor țesut + măsuțe cafea suprapuse + canapea 3 locuri lângă bancheta ferestrei de Vest (6.18..8.38)
+    box('mobilier', FM.rug, 1.25, 3.25, F, F + 0.015, 5.45, 7.88);
+    cyl('mobilier', FM.marble, 2.05, 6.12, 0.35, F + 0.36, F + 0.40, 24);
+    cyl('mobilier', FM.black, 2.05, 6.12, 0.03, F, F + 0.36, 10);
+    cyl('mobilier', FM.oak, 2.52, 5.90, 0.23, F + 0.30, F + 0.34, 20);
+    cyl('mobilier', FM.black, 2.52, 5.90, 0.025, F, F + 0.30, 10);
 
-    f(FM.fabric, 1.40, 3.20, 7.05, 7.92, 0.22, 0.10);
-    legs(FM.walnut, 1.45, 3.15, 7.10, 7.87, 0.10, 0.05);
-    box('mobilier', FM.fabric, 1.40, 3.20, F + 0.32, F + 0.80, 7.72, 7.92); // spătar
-    box('mobilier', FM.fabric, 1.40, 1.58, F + 0.32, F + 0.62, 7.05, 7.92); // braț V
-    box('mobilier', FM.fabric, 3.02, 3.20, F + 0.32, F + 0.62, 7.05, 7.92); // braț E
+    f(FM.fabric, 1.40, 3.20, 6.85, 7.72, 0.22, 0.10);
+    legs(FM.walnut, 1.45, 3.15, 6.90, 7.67, 0.10, 0.05);
+    box('mobilier', FM.fabric, 1.40, 3.20, F + 0.32, F + 0.80, 7.52, 7.72); // spătar
+    box('mobilier', FM.fabric, 1.40, 1.58, F + 0.32, F + 0.62, 6.85, 7.72); // braț V
+    box('mobilier', FM.fabric, 3.02, 3.20, F + 0.32, F + 0.62, 6.85, 7.72); // braț E
     for (let i = 0; i < 3; i++) {
-      box('mobilier', FM.fabricLt, 1.60 + i * 0.47, 2.05 + i * 0.47, F + 0.32, F + 0.45, 7.08, 7.70);
-      box('mobilier', FM.fabricLt, 1.62 + i * 0.47, 2.03 + i * 0.47, F + 0.45, F + 0.78, 7.57, 7.72);
+      box('mobilier', FM.fabricLt, 1.60 + i * 0.47, 2.05 + i * 0.47, F + 0.32, F + 0.45, 6.88, 7.50);
+      box('mobilier', FM.fabricLt, 1.62 + i * 0.47, 2.03 + i * 0.47, F + 0.45, F + 0.78, 7.37, 7.52);
     }
-    box('mobilier', FM.pillow, 1.62, 1.86, F + 0.46, F + 0.72, 7.40, 7.56);
-    box('mobilier', FM.ochre, 2.72, 2.98, F + 0.46, F + 0.72, 7.40, 7.56);
+    box('mobilier', FM.pillow, 1.62, 1.86, F + 0.46, F + 0.72, 7.20, 7.36);
+    box('mobilier', FM.ochre, 2.72, 2.98, F + 0.46, F + 0.72, 7.20, 7.36);
 
-    // Colț lounge / lectură în fața geamului V mutat spre colț (8.45..10.85), lăsând axul ușii de terasă (1.15..2.67) 100% liber
-    f(FM.boucle, 0.50, 1.12, 9.25, 9.88, 0.22, 0.14);
-    legs(FM.walnut, 0.54, 1.08, 9.29, 9.84, 0.14, 0.035);
-    box('mobilier', FM.boucle, 0.50, 0.70, F + 0.36, F + 0.78, 9.25, 9.88);
-    cyl('mobilier', FM.oak, 0.76, 8.85, 0.21, F + 0.46, F + 0.49, 16);
-    cyl('mobilier', FM.black, 0.76, 8.85, 0.025, F, F + 0.46, 10);
-    cyl('mobilier', FM.brass, 0.66, 10.42, 0.015, F, F + 1.62, 10); // lampadar lectură lângă fotoliu
-    cyl('mobilier', FM.linen, 0.66, 10.42, 0.18, F + 1.44, F + 1.68, 16);
+    // Zonă de stat lângă șemineu (SV: 2 fotolii lounge + puf rotund + măsuță laterală + covor cald + bancheta ferestrei S)
+    box('mobilier', FM.rugWarm, 1.48, 2.98, F, F + 0.015, 9.08, 10.98);
+    // Fotoliu lounge V orientat spre est / șemineu
+    f(FM.boucle, 0.52, 1.16, 8.62, 9.26, 0.22, 0.14);
+    legs(FM.walnut, 0.56, 1.12, 8.66, 9.22, 0.14, 0.035);
+    box('mobilier', FM.boucle, 0.52, 0.72, F + 0.36, F + 0.78, 8.62, 9.26);
+    // Fotoliu principal lângă șemineu (orientat spre sud / vatră și bancheta ferestrei 1.55..3.07)
+    f(FM.boucle, 1.62, 2.32, 9.48, 10.14, 0.22, 0.14);
+    legs(FM.walnut, 1.66, 2.28, 9.52, 10.10, 0.14, 0.035);
+    box('mobilier', FM.boucle, 1.62, 2.32, F + 0.36, F + 0.78, 9.48, 9.68); // spătar pe nord -> privește spre șemineu
+    box('mobilier', FM.ochre, 1.82, 2.12, F + 0.38, F + 0.62, 9.68, 9.82); // pernă accent
+    // Puf rotund bouclé lângă vatră + măsuță laterală + lampadar
+    cyl('mobilier', FM.fabricLt, 1.86, 10.52, 0.23, F + 0.03, F + 0.36, 20);
+    cyl('mobilier', FM.walnut, 1.86, 10.52, 0.20, F, F + 0.03, 18);
+    FURN.push({ cx: 1.86, cz: 10.52, r: 0.24 });
+    cyl('mobilier', FM.oak, 2.55, 9.78, 0.20, F + 0.46, F + 0.49, 16);
+    cyl('mobilier', FM.black, 2.55, 9.78, 0.025, F, F + 0.46, 10);
+    cyl('mobilier', FM.brass, 0.64, 9.46, 0.015, F, F + 1.62, 10); // lampadar lectură lângă șemineu
+    cyl('mobilier', FM.linen, 0.64, 9.46, 0.18, F + 1.44, F + 1.68, 16);
 
-    // ---- 3. BUCĂTĂRIE ÎN L (CU MAȘINĂ DE SPĂLAT) + INSULĂ DE BUCĂTĂRIE + HOL INTRARE EST ----
-    // Banchetă / cuier hol pe peretele camerei tehnice
-    f(FM.oak, 4.55, 5.45, 8.26, 8.62, 0.04, 0.42);
-    legs(FM.black, 4.58, 5.42, 8.29, 8.59, 0.42, 0.035);
-    box('mobilier', FM.walnut, 4.62, 5.38, F + 1.15, F + 1.85, 8.255, 8.285);
+    // ---- 3. BUCĂTĂRIE MĂRITĂ ÎN L (PE TOT PERETELE E 8.20..11.27 + SUD 4.90..6.76) + INSULĂ MARE ----
+    // Insulă mărită (x = 3.88..4.82, z = 8.38..9.90) cu blat cascadă în consolă spre Vest + 3 scaune de bar (liber față de ușa S 3.35..4.87)
+    f(FM.cabSage, 3.88, 4.82, 8.38, 9.90, 0.86);
+    box('mobilier', FM.oak, 3.86, 3.88, F + 0.06, F + 0.86, 8.38, 9.90); // placare decorativă stejar spre living
+    box('mobilier', FM.oak, 3.88, 4.82, F, F + 0.06, 8.38, 9.90); // plintă stejar
+    box('mobilier', FM.marble, 3.63, 4.84, F + 0.86, F + 0.90, 8.36, 9.92); // blat marmură cu consolă bar 25 cm
+    box('mobilier', FM.ceramic, 4.22, 4.46, F + 0.90, F + 0.96, 9.02, 9.26); // bol ceramic decorativ pe insulă
+    stool(3.43, 8.64);
+    stool(3.43, 9.14);
+    stool(3.43, 9.64);
 
-    // Insulă de bucătărie (x = 3.38..4.28, z = 8.92..10.32) cu blat cascadă în consolă spre Vest + 3 scaune de bar
-    f(FM.cabSage, 3.38, 4.28, 8.92, 10.32, 0.86);
-    box('mobilier', FM.oak, 3.36, 3.38, F + 0.06, F + 0.86, 8.92, 10.32); // placare decorativă stejar spre living
-    box('mobilier', FM.oak, 3.38, 4.28, F, F + 0.06, 8.92, 10.32); // plintă stejar
-    box('mobilier', FM.marble, 3.16, 4.30, F + 0.86, F + 0.90, 8.90, 10.34); // blat marmură cu consolă bar 22 cm
-    box('mobilier', FM.ceramic, 3.72, 3.94, F + 0.90, F + 0.96, 9.52, 9.74); // bol ceramic decorativ pe insulă
-    stool(2.98, 9.20);
-    stool(2.98, 9.62);
-    stool(2.98, 10.04);
+    // Coloane înalte pe peretele de Est eliberat de ușa exterioară (z = 8.22..9.44): frigider + cuptor/cămară
+    f(FM.steel, 6.14, 6.75, 8.22, 8.82, 2.08); // turn frigider/congelator înalt
+    box('mobilier', FM.black, 6.135, 6.15, F + 0.90, F + 1.60, 8.26, 8.30); // mâner vertical frigider
+    f(FM.steel, 6.14, 6.75, 8.84, 9.44, 2.08); // turn cuptor încorporat + cămară
+    box('mobilier', FM.black, 6.135, 6.16, F + 0.92, F + 1.42, 8.90, 9.38); // geam cuptor încorporat spre insulă
 
-    // Bucătărie modernă în L (colț SE: turn frigider/cuptor + plită/hotă + chiuvetă + mașină de spălat integrată sub blat E)
-    f(FM.steel, 4.92, 5.52, 10.65, 11.27, 2.02); // turn frigider + cuptor
-    box('mobilier', FM.black, 4.97, 5.47, F + 0.92, F + 1.42, 10.645, 10.67); // geam cuptor încorporat
-    f(FM.cabSage, 5.54, 6.76, 10.66, 11.27, 0.86);
-    f(FM.cabSage, 6.16, 6.76, 10.36, 10.66, 0.86);
-    // Mașină de spălat încorporată sub blatul de est (x = 6.16..6.75, z = 9.76..10.36, cu hublou spre Vest)
-    f(FM.ceramic, 6.16, 6.75, 9.76, 10.36, 0.85);
-    box('mobilier', FM.black, 6.145, 6.165, F + 0.25, F + 0.62, 9.88, 10.24); // hublou sticlă
-    box('mobilier', FM.steel, 6.15, 6.168, F + 0.72, F + 0.82, 9.80, 10.32); // panou comenzi inox + sertar
-    // Blat continuu de marmură L (acoperă și mașina de spălat, până la z = 9.74)
-    box('mobilier', FM.marble, 5.54, 6.76, F + 0.86, F + 0.90, 10.64, 11.27);
-    box('mobilier', FM.marble, 6.14, 6.76, F + 0.86, F + 0.90, 9.74, 10.64);
-    box('mobilier', FM.cab, 6.18, 6.75, F + 1.56, F + 2.15, 11.06, 11.27); // corp suspendat SE (liber de hotă și fereastra E)
-    box('mobilier', FM.black, 5.58, 6.12, F + 0.90, F + 0.915, 10.76, 11.18); // plită inducție
-    box('mobilier', FM.steel, 5.56, 6.14, F + 1.56, F + 1.76, 10.78, 11.27); // hotă inox
-    box('mobilier', FM.steel, 5.74, 5.96, F + 1.76, F + 2.40, 11.02, 11.27); // coș hotă
-    box('mobilier', FM.steel, 6.24, 6.68, F + 0.90, F + 0.915, 10.42, 10.86); // chiuvetă bucătărie
-    cyl('mobilier', FM.brass, 6.68, 10.64, 0.015, F + 0.90, F + 1.12, 10); // baterie bucătărie
+    // Blat E continuu (z = 9.46..10.66) cu mașină de spălat integrată + chiuvetă centrată sub fereastra E (9.95..11.05)
+    f(FM.ceramic, 6.16, 6.75, 9.52, 10.12, 0.85); // mașină de spălat frontală
+    box('mobilier', FM.black, 6.145, 6.165, F + 0.25, F + 0.62, 9.64, 10.00); // hublou sticlă
+    box('mobilier', FM.steel, 6.15, 6.168, F + 0.72, F + 0.82, 9.56, 10.08); // panou comenzi inox + sertar
+    f(FM.cabSage, 6.16, 6.76, 10.12, 10.66, 0.86);
+    box('mobilier', FM.marble, 6.14, 6.76, F + 0.86, F + 0.90, 9.46, 10.66);
+    box('mobilier', FM.steel, 6.24, 6.68, F + 0.90, F + 0.915, 10.20, 10.64); // chiuvetă sub fereastra E
+    cyl('mobilier', FM.brass, 6.68, 10.42, 0.015, F + 0.90, F + 1.12, 10); // baterie bucătărie
+
+    // Blat S continuu (x = 4.90..6.76, z = 10.66..11.27) cu mașină de spălat vase + plită + hotă + corpuri suspendate
+    f(FM.cabSage, 4.90, 6.76, 10.66, 11.27, 0.86);
+    box('mobilier', FM.marble, 4.88, 6.76, F + 0.86, F + 0.90, 10.64, 11.27);
+    box('mobilier', FM.cab, 4.90, 5.42, F + 1.56, F + 2.15, 10.92, 11.27); // corp suspendat stânga hotei
+    box('mobilier', FM.cab, 6.14, 6.75, F + 1.56, F + 2.15, 11.06, 11.27); // corp suspendat dreapta hotei (liber de fereastra E)
+    box('mobilier', FM.black, 5.46, 6.04, F + 0.90, F + 0.915, 10.76, 11.18); // plită inducție
+    box('mobilier', FM.steel, 5.44, 6.06, F + 1.56, F + 1.76, 10.78, 11.27); // hotă inox
+    box('mobilier', FM.steel, 5.64, 5.86, F + 1.76, F + 2.40, 11.02, 11.27); // coș hotă
 
     // ---- 4. DORMITOR MATRIMONIAL (+1,00 m lățime: x = 3.43..6.76, z = 0.43..4.72, fără plante) ----
     box('mobilier', FM.rugWarm, 3.65, 6.10, F, F + 0.015, 0.95, 3.35);
@@ -2275,19 +2311,19 @@ export function buildArchitecturalScene(
     legs(FM.walnut, 6.36, 6.71, 2.60, 3.60, 0.14, 0.035);
     const mirDorm = box('mobilier', FM.mirror, 6.74, 6.76, F + 1.05, F + 1.82, 2.75, 3.45);
     mirDorm.castShadow = false;
-    f(FM.boucle, 5.95, 6.62, 0.48, 1.05, 0.22, 0.14); // fotoliu lounge colț NE
-    box('mobilier', FM.boucle, 6.38, 6.62, F + 0.36, F + 0.78, 0.48, 1.05);
+    f(FM.boucle, 6.04, 6.64, 0.46, 0.92, 0.22, 0.14); // fotoliu lounge colț NE (liber față de bancheta ferestrelor N și E)
+    box('mobilier', FM.boucle, 6.42, 6.64, F + 0.36, F + 0.78, 0.46, 0.92);
 
-    // ---- 5. DORMITOR 1 (PAT MIC 100×200 cm + BIROU SUB FEREASTRĂ, fără plante) ----
+    // ---- 5. DORMITOR 1 (PAT MIC 100×200 cm + BIROU LUMINOS + BANCHETĂ LA FEREASTRĂ) ----
     box('mobilier', FM.rug, 0.90, 2.72, F, F + 0.015, 1.55, 3.15);
     bed(0.44, 2.44, 1.85, 2.85, -1, FM.duvet2, FM.ochre); // pat mic single 100×200 cm
     nightstand(0.45, 0.88, 1.36, 1.78, true);
-    // Birou luminos centrat sub fereastra nordică (1.11..2.62) + bibliotecă NV + dulap SV
-    table(FM.walnut, FM.oak, 1.38, 2.62, 0.44, 0.96, 0.75);
-    box('mobilier', FM.black, 1.82, 2.18, F + 0.75, F + 0.77, 0.56, 0.82);
-    box('mobilier', FM.steel, 1.84, 2.16, F + 0.77, F + 0.99, 0.54, 0.56);
-    chair(2.00, 1.20, 0, 1, FM.fabricLt);
-    f(FM.walnut, 0.45, 1.18, 0.44, 0.82, 1.85); // bibliotecă colț NV
+    // Birou pe peretele E (lângă fereastra nordică 1.11..2.62, lăsând liberă bancheta de șezut de la fereastră)
+    table(FM.walnut, FM.oak, 2.76, 3.30, 0.55, 1.65, 0.75);
+    box('mobilier', FM.black, 2.90, 3.16, F + 0.75, F + 0.77, 0.92, 1.28);
+    box('mobilier', FM.steel, 3.16, 3.18, F + 0.77, F + 0.99, 0.94, 1.26);
+    chair(2.50, 1.10, -1, 0, FM.fabricLt);
+    f(FM.walnut, 0.45, 1.08, 0.44, 0.82, 1.85); // bibliotecă colț NV (liberă față de fereastra 1.11..2.62)
     wardrobe(0.45, 2.18, 4.10, 4.70, 2.25); // dulap pe peretele SV (liber față de ușă 2.37..3.27)
 
     // ---- 6. BAIE (x = 4.48..6.76, z = 4.82..6.55) ----
@@ -2385,12 +2421,12 @@ export function buildArchitecturalScene(
         Math.max(0, ...wl.openings.map((o) => Math.min(o.u1, wl.ridge! + 0.10) - Math.max(o.u0, wl.ridge! - 0.10))),
       );
     }
-    axisCheck('Acoperiș', 'coșul trece între pană și panouri (la cel puțin 5 cm de fiecare)', () => {
+    axisCheck('Acoperiș', 'coșul trece între panouri și peretele de sud (la cel puțin 5 cm de fiecare)', () => {
       const cz = C.chim.z;
       const r = 0.11;
-      const gR = cz - r - (ZR + RIDGE.b / 2);
-      const gP = Math.min(...PVP.map((q) => L - q.zb)) - (cz + r);
-      return Math.max(0, 0.05 - Math.min(gR, gP));
+      const gPV = cz - r - Math.max(...PVP.map((q) => L - q.za));
+      const gW = L - T - (cz + r);
+      return Math.max(0, 0.05 - Math.min(gPV, gW));
     });
   }
 
@@ -2816,7 +2852,7 @@ export function buildArchitecturalScene(
         'Buiandrugii stau PE stâlpii de gol. Pe pereții N/S, cosoroaba 12×20 cu fața de sus teșită la 30° trece peste stâlpii de colț și iese 42 cm în consolă.',
         'Cruci din tiranți de oțel Ø20 cu întinzător, câte două în fiecare perete, în panourile fără goluri; ancore de ridicare la capete.',
         'Pe frontoane: cosoroabele înclinate, de la cosoroaba N/S până la locul penei.',
-        'Pe frontonul de vest, fereastra mare (2,40 m) stă la sud de stâlpul de coamă, între doi stâlpi de gol, cu buiandrug 20×15 – stâlpul de coamă coboară neîntrerupt până în platformă.',
+        'Pe frontonul de vest, fereastra mare (2,20 m) stă la sud de stâlpul de coamă, în dreptul canapelei, între doi stâlpi de gol, cu buiandrug 20×15 – stâlpul de coamă coboară neîntrerupt până în platformă.',
       ],
       m: `${Q.posts} stâlpi, ${Q.diag} tiranți Ø20, ${Q.hd} ancore de ridicare, cosoroabe 12×20 și 12×15.`,
       w: 'Stâlpii se verifică la fir cu plumb și se sprijină provizoriu (șipci în diagonală) până se întind tiranții.',
@@ -2863,7 +2899,7 @@ export function buildArchitecturalScene(
       p: [
         'De dedesubt: frâna de vapori, lățile de instalații de 4 cm și lambriul – ele susțin baloții.',
         'De sus, baloții se așază culcați între căpriori, pe ambii versanți.',
-        'Coșul trece printre doi căpriori, pe versantul sudic, imediat sub coamă: acolo se pune un manșon de vată minerală (nu paie) și o ramă de tablă la tavan.',
+        'Coșul trece printre doi căpriori, pe versantul sudic, în zona colțului sud-vest: acolo se pune un manșon de vată minerală (nu paie) și o ramă de tablă la tavan.',
       ],
       m: `≈ ${B(Q.baleRoof)} baloți, ${nfLocal(ceilArea, 0)} m² lambriu și frână de vapori.`,
       w: 'Frâna de vapori se lipește etanș la toate îmbinările.',
@@ -2913,7 +2949,7 @@ export function buildArchitecturalScene(
         'Glafuri exterioare cu picurător.',
       ],
       m: `${WALLS.reduce((a, w) => a + w.openings.filter((o) => o.type === 'win').length, 0)} ferestre, ${WALLS.reduce((a, w) => a + w.openings.filter((o) => o.type === 'door').length, 0)} uși exterioare.`,
-      w: 'Fereastra mare de vest (2,40 × 1,45 m) e fereastră de lumină: fixă, cu geam mat. La 0,8 m de limită, Codul civil (art. 615–616) nu permite fereastră de vedere fără acordul vecinului.',
+      w: 'Fereastra mare de vest (2,20 × 1,65 m, parapet 0,40 m cu banchetă) e fereastră de lumină: fixă, cu geam mat. La 0,8 m de limită, Codul civil (art. 615–616) nu permite fereastră de vedere fără acordul vecinului.',
       items: [],
     },
     {
@@ -2973,7 +3009,7 @@ export function buildArchitecturalScene(
         `${nPV} panouri pe șine prinse cu cleme pe falțul tablei, fără găurirea învelitorii.`,
         'Panourile stau pe versantul sud la 30° – orientarea cea bună la această latitudine.',
         'Cablul de curent continuu coboară în camera tehnică.',
-        'Primul rând începe la 0,80 m (pe pantă) sub coamă, ca să rămână loc pentru coșul sobei.',
+        'Panourile sunt urcate la 0,28 m sub coamă, ca între rândul de jos și peretele de sud să rămână loc liber pentru coșul sobei.',
       ],
       m: `${nPV} panouri de 450 W (${nfLocal(pvKw)} kWp), șine, cablu solar.`,
       w: 'Verifică umbrirea cu simularea soarelui (21 dec), mai ales dacă plantezi pomi la sud.',
@@ -3019,9 +3055,9 @@ export function buildArchitecturalScene(
       dur: 5,
       view: V.all,
       p: [
-        'Soba lângă peretele de vest, în axul canapelei, chiar lângă fereastra mare; ecran termic ceramic pe perete și placă incombustibilă sub ea.',
-        'Coșul inox izolat urcă drept și iese pe versantul sudic imediat sub coamă – între pană și primul rând de panouri, deci nu le umbrește – și depășește coama cu cel puțin 0,6 m.',
-        'Suportul de lemne lângă sobă, zona media cu riflaj pe peretele nordic al livingului, obiectele sanitare, bucătăria în L și echipamentele din camera tehnică.',
+        'Soba în colțul de sud-vest, lângă bancheta ferestrei de sud și zona cozy de șemineu (2 fotolii, puf, măsuță); ferestrele joase au spații de șezut în grosimea peretelui de 40 cm.',
+        'Coșul inox izolat urcă drept prin versantul sudic (la sud de panourile PV, fără să le umbrească) și depășește coama cu cel puțin 0,6 m.',
+        'Suportul de lemne lângă sobă, zona media cu riflaj pe peretele nordic al livingului, obiectele sanitare, bucătăria mărită în L pe tot peretele de est cu insulă centrală și echipamentele din camera tehnică.',
       ],
       m: `coș inox izolat Ø150, ${B(yApex + 0.568 + 0.6 - F - 1.05)} m.`,
       w: 'Distanța dintre coș și paie/lemn: cel puțin 40 cm sau manșon izolat omologat.',

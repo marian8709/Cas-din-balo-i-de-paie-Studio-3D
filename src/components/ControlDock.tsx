@@ -86,7 +86,7 @@ const JOINT_LIST: [string, string][] = [
 ];
 
 const WALK_LIST: [string, string][] = [
-  ['intrare', 'Intră pe ușa de est'],
+  ['intrare', 'Intră pe ușa de sud'],
   ['living', 'Living'],
   ['bucatarie', 'Masă + bucătărie'],
   ['dorm1', 'Dormitor 1'],
